@@ -1,29 +1,12 @@
-#include <iostream>
+// ©Тарасов Дмитрий РИ-280001
+
 #include <vector>
 
 using namespace std;
 
-
 class PlayField
 {
 public:
-	class CellPosition
-	{
-	private:
-		int row;
-		int column;
-
-		bool inCorrectRange(int);
-
-	public:
-		CellPosition(int, int);
-		CellPosition(int);
-		void setRow(int);
-		int getRow();
-		void setColumn(int);
-		int getColumn();
-	};
-
 	enum fieldStatus
 	{
 		fsInvalid,
@@ -32,7 +15,6 @@ public:
 		fsNoughtsWin,
 		fsDraw,
 	};
-
 	enum cellValue
 	{
 		csEmpty,
@@ -40,19 +22,32 @@ public:
 		csNought
 	};
 
-	cellValue playField[9];
-	cellValue nextMoveSymbol = csCross;
+	class CellPosition
+	{
+	public:
+		CellPosition(int, int);
+		operator int() const;
+		void setRow(int);
+		int getRow() const { return m_row; };
+		void setColumn(int);
+		int getColumn() const { return m_column; };
+
+	private:
+		bool inCorrectRange(int) const;
+		int m_row;
+		int m_column;
+	};
 
 	PlayField();
-	PlayField(int[9]);
-
-	cellValue& operator[] (CellPosition);
-	fieldStatus checkFieldStatus();
-	PlayField makeMove(CellPosition);
-	vector<CellPosition> getEmptyCells();
+	cellValue operator[] (CellPosition) const;
+	fieldStatus checkFieldStatus() const;
+	PlayField makeMove(CellPosition) const;
+	vector<CellPosition> getEmptyCells() const;
 	void printField();
 
 private:
-	PlayField operator+(CellPosition position);
-	fieldStatus checkLineStatus(cellValue*, cellValue*, cellValue*);
+	PlayField operator+(CellPosition position) const;
+	fieldStatus checkLineStatus(cellValue, cellValue, cellValue) const;
+
+	cellValue playField[9];
 };

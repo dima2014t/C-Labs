@@ -1,46 +1,48 @@
-#include <iostream>
+// ©Тарасов Дмитрий РИ-280001
+
 #include <vector>
 #include <cassert>
-#include "PlayField.h"
-#include "TreeNode.h"
+#include "PlayField.h";
+#include "TreeNode.h";
 
 using namespace std;
 
 
-bool TreeNode::isTerminal()
+bool TreeNode::isTerminal() const
 {
-	return hair.size() == 0;
+	PlayField::fieldStatus elementStatus = element.checkFieldStatus();
+	return elementStatus != PlayField::fsInvalid && elementStatus != PlayField::fsNormal;
 }
 
-int TreeNode::childQty()
+int TreeNode::childQty() const
 {
 	return element.getEmptyCells().size();
 }
 
-void TreeNode::addChild(PlayField* field)
+void TreeNode::addChild(TreeNode node)
 {
-	TreeNode v = TreeNode(*field);
 	assert(("at this level already the maximum number of descendants", childQty() > childCount()));
-	hair.push_back(v);
+	m_hair.push_back(&node);
 }
 
-TreeNode* TreeNode::operator[](int index)
+TreeNode& TreeNode::operator[](int index) const
 {
 	assert(("this node has no descendant with this index", childCount() > index));
-	return &hair[index];
+	return *m_hair[index];
 }
 
-int TreeNode::childCount()
+int TreeNode::childCount() const
 {
-	return hair.size();
+	return m_hair.size();
 }
 
-const PlayField* TreeNode::value()
+const PlayField& TreeNode::value() const
 {
-	return &element;
+	return element;
 }
 
-TreeNode::TreeNode(PlayField value)
+TreeNode::TreeNode(PlayField value, TreeNode* iParent)
+	: element(value)
 {
-	element = value;
+	m_parent = iParent;
 }
