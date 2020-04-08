@@ -1,32 +1,31 @@
-﻿#include <iostream>
+﻿// ©Тарасов Дмитрий РИ-280001
+
+#include <iostream>
 #include <vector>
 #include "PlayField.h"
 #include "TreeNode.h"
 
 using namespace std;
 
-
-void fullDetour(TreeNode* tree, int* crossWinCount, int* noughtWinCount, int* drawWinCount)
+void fullDetour(TreeNode tree, int &crossWinCount, int &noughtWinCount, int &drawWinCount)
 {
-	switch (tree->element.checkFieldStatus())
+	switch (tree.value().checkFieldStatus())
 	{
 		case(PlayField::fsCrossesWin):
-			(*crossWinCount)++;
+			(crossWinCount)++;
 			break;
 		case(PlayField::fsNoughtsWin):
-			(*noughtWinCount)++;
+			(noughtWinCount)++;
 			break;
 		case(PlayField::fsDraw):
-			(*drawWinCount)++;
-			break;
-		case(PlayField::fsInvalid):
+			(drawWinCount)++;
 			break;
 		case(PlayField::fsNormal):
 		{
-			for (auto i : tree->element.getEmptyCells())
+			for (auto i : tree.value().getEmptyCells())
 			{
-				tree->addChild(&(tree->element.makeMove(i)));
-				fullDetour(&tree->hair.back(), crossWinCount, noughtWinCount, drawWinCount);
+				tree.addChild(TreeNode(tree.value().makeMove(i), &tree));
+				fullDetour(*tree.m_hair.back(), crossWinCount, noughtWinCount, drawWinCount);
 			}
 		}
 	}
@@ -37,19 +36,18 @@ int main()
 	int overallCrossWinsCount = 0,
 		overallNoughtWinsCount = 0,
 		overallDrawWinsCount = 0;
-	PlayField field = PlayField();
-	TreeNode tree = TreeNode(field);
+	TreeNode tree = TreeNode(PlayField(), 0);
 
-	for (auto i : tree.element.getEmptyCells())
+	for (auto i : tree.value().getEmptyCells())
 	{
 		int crossWinCount = 0, 
 			noughtWinCount = 0, 
 			drawWinCount = 0;
 
-		PlayField currentField = field.makeMove(i);
-		tree.addChild(&currentField);
+		PlayField currentField = tree.value().makeMove(i);
+		tree.addChild(TreeNode(currentField, &tree));
 		currentField.printField();
-		fullDetour(&tree.hair.back(), &crossWinCount, &noughtWinCount, &drawWinCount);
+		fullDetour(*tree.m_hair.back(), crossWinCount, noughtWinCount, drawWinCount);
 		cout << "\t" << "x = " << crossWinCount << " o = " << noughtWinCount << " d = " << drawWinCount << endl;
 		overallCrossWinsCount += crossWinCount;
 		overallNoughtWinsCount += noughtWinCount;

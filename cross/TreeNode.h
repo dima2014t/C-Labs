@@ -1,21 +1,23 @@
-#include <iostream>
+// ©Тарасов Дмитрий РИ-280001
+
 #include <vector>
 
 using namespace std;
 
-
 class TreeNode
 {
 public:
-	PlayField element;
-	vector<TreeNode> hair;
-	bool isTerminal();
-	void addChild(PlayField*);
-	int childCount();
-	const PlayField* value();
-	TreeNode(PlayField);
-	TreeNode* operator[](int);
+	TreeNode(PlayField, TreeNode*);
+	bool isTerminal() const;
+	int childCount() const;
+	const PlayField& value() const;
+	TreeNode& operator[](int) const;
+	void addChild(TreeNode);
+
+	vector<TreeNode*> m_hair;
+	TreeNode* m_parent;
 
 private:
-	int childQty();
+	int childQty() const;
+	const PlayField element;
 };

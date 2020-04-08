@@ -1,3 +1,5 @@
+// ©Òàðàñîâ Äìèòðèé ÐÈ-280001
+
 #include <iostream>
 #include <vector>
 #include <cassert>
@@ -5,8 +7,7 @@
 
 using namespace std;
 
-
-bool PlayField::CellPosition::inCorrectRange(int value)
+bool PlayField::CellPosition::inCorrectRange(int value) const
 {
 	return  value >= 0 && value <= 2;
 }
@@ -17,30 +18,24 @@ PlayField::CellPosition::CellPosition(int row, int column)
 	setColumn(column);
 }
 
-PlayField::CellPosition::CellPosition(int index)
+PlayField::CellPosition::operator int() const
 {
-	setRow(index / 3);
-	setColumn(index % 3);
+	return getRow() * 3 + getColumn();
 }
 
-void PlayField::CellPosition::setRow(int row)
+void PlayField::CellPosition::setRow(int iRow)
 {
-	assert(("uncorrect row value", inCorrectRange(row)));
-	this->row = row;
+	assert(("incorrect row value", inCorrectRange(iRow)));
+	m_row = iRow;
 }
 
-int PlayField::CellPosition::getRow() { return row; };
-
-void PlayField::CellPosition::setColumn(int column)
+void PlayField::CellPosition::setColumn(int iColumn)
 {
-	assert(("uncorrect column value", inCorrectRange(column)));
-	this->column = column;
+	assert(("incorrect column value", inCorrectRange(iColumn)));
+	m_column = iColumn;
 }
 
-int PlayField::CellPosition::getColumn() { return column; };
-
-
-PlayField PlayField::makeMove(CellPosition position)
+PlayField PlayField::makeMove(CellPosition position) const
 {
 	return *this + position;
 }
@@ -52,81 +47,61 @@ PlayField::PlayField()
 		playField[index] = csEmpty;
 };
 
-PlayField::PlayField(int field[9])
-{
-	for (int index = 0; index < 9; index++)
-		playField[index] = cellValue(field[index]);
-};
 
-PlayField::cellValue& PlayField::operator[] (CellPosition position)
+PlayField::cellValue PlayField::operator[] (CellPosition position) const
 {
-	int index = position.getRow() * 3 + position.getColumn();
+	int index = int(position);
 	assert(("this cell is not on the playing field", (index >= 0 || index <= 8)));
 	return playField[index];
 }
 
-PlayField::fieldStatus PlayField::checkLineStatus(cellValue* firstCell, cellValue* secondCell, cellValue* thirdÑell)
+PlayField::fieldStatus PlayField::checkLineStatus(cellValue firstCell, cellValue secondCell, cellValue thirdÑell) const
 {
-	if (*firstCell == *secondCell && *secondCell == *thirdÑell && *secondCell != csEmpty)
+	if (firstCell == secondCell && secondCell == thirdÑell && secondCell != csEmpty)
 	{
-		if (*secondCell == csCross)
+		if (secondCell == csCross)
 			return fsCrossesWin;
 		return fsNoughtsWin;
 	}
 	return fsNormal;
 }
 
-PlayField::fieldStatus PlayField::checkFieldStatus()
+PlayField::fieldStatus PlayField::checkFieldStatus() const
 {
-	int cross = 0;
-	int nought = 0;
-	for (auto cell : playField)
-	{
-		switch (cell)
-		{
-		case(csCross):
-			cross++;
-			break;
-		case(csNought):
-			nought++;
-			break;
-		}
+	bool isCrossWin = false, isNoughtWin = false;
+	for (int index = 0; index < 3; index++) {
+		fieldStatus rowStatus = checkLineStatus((*this)[CellPosition(index, 0)], (*this)[CellPosition(index, 1)], (*this)[CellPosition(index, 2)]);
+		fieldStatus columnStatus = checkLineStatus((*this)[CellPosition(0, index)], (*this)[CellPosition(1, index)], (*this)[CellPosition(2, index)]);
+		if (rowStatus == fsCrossesWin || columnStatus == fsCrossesWin)
+			isCrossWin = true;
+		else if (rowStatus == fsNoughtsWin || columnStatus == fsNoughtsWin)
+			isNoughtWin = true;
 	}
-	if (abs(cross - nought) >= 2)
+	fieldStatus firstDiagonalStatus = checkLineStatus((*this)[CellPosition(0, 0)], (*this)[CellPosition(1, 1)], (*this)[CellPosition(2, 2)]);
+	fieldStatus secondDiagonalStatus = checkLineStatus((*this)[CellPosition(0, 2)], (*this)[CellPosition(1, 1)], (*this)[CellPosition(2, 0)]);
+	if (firstDiagonalStatus == fsCrossesWin || secondDiagonalStatus == fsCrossesWin)
+		isCrossWin = true;
+	if (firstDiagonalStatus == fsNoughtsWin || secondDiagonalStatus == fsNoughtsWin)
+		isNoughtWin = true;
+	if (isCrossWin && isNoughtWin)
 		return fsInvalid;
-	for (int index = 0; index < 7; index += 3)
-	{
-		fieldStatus lineStatus = checkLineStatus(&playField[index], &playField[index + 1], &playField[index + 2]);
-		if (lineStatus != fsNormal)
-			return lineStatus;
-	}
-	for (int index = 0; index < 3; index++)
-	{
-		fieldStatus lineStatus = checkLineStatus(&playField[index], &playField[index + 3], &playField[index + 6]);
-		if (lineStatus != fsNormal)
-			return lineStatus;
-	}
-	for (int index = 0; index < 3; index += 2)
-	{
-		fieldStatus lineStatus = checkLineStatus(&playField[index], &playField[4], &playField[8 - index]);
-		if (lineStatus != fsNormal)
-			return lineStatus;
-	}
-	for (int index = 0; index < 9; index++)
-	{
-		if (playField[index] == csEmpty)
+	if (isCrossWin)
+		return fsCrossesWin;
+	if (isNoughtWin)
+		return fsNoughtsWin;
+	for (auto cell : playField)
+		if (cell == csEmpty)
 			return fsNormal;
-	}
 	return fsDraw;
 }
 
-vector<PlayField::CellPosition> PlayField::getEmptyCells()
+vector<PlayField::CellPosition> PlayField::getEmptyCells() const
 {
 	vector<CellPosition> emptyCells;
 	for (int i = 0; i < 9; i++)
 	{
 		if (playField[i] == csEmpty)
-			emptyCells.push_back(PlayField::CellPosition(i));
+			emptyCells.push_back(PlayField::CellPosition(i / 3, i % 3));
 	}
 	return emptyCells;
 }
@@ -154,14 +129,23 @@ void PlayField::printField()
 	}
 }
 	
-PlayField PlayField::operator+(CellPosition position)
+PlayField PlayField::operator+(CellPosition position) const
 {
+	assert(("the field is in an unplayable state", this->checkFieldStatus() == fsNormal));
+	assert(("attempt to move to a filled cell", (*this)[position] == csEmpty));
 	PlayField fieldCopy = *this;
-	assert(("attempt to move to a filled cell", fieldCopy[position] == csEmpty));
-	fieldCopy[position] = nextMoveSymbol;
-	if (fieldCopy.nextMoveSymbol == csCross)
-		fieldCopy.nextMoveSymbol = csNought;
-	else
-		fieldCopy.nextMoveSymbol = csCross;
+	int crossCount = 0, noughtCount = 0;
+	for (auto cell : playField)
+	{
+		switch (cell)
+		{
+		case csCross:
+			crossCount++;
+			break;
+		case csNought:
+			noughtCount++;
+		}
+	}
+	fieldCopy.playField[int(position)] = crossCount > noughtCount ? csNought : csCross;
 	return fieldCopy;
 }
