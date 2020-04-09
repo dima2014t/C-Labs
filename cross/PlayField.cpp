@@ -55,9 +55,9 @@ PlayField::cellValue PlayField::operator[] (CellPosition position) const
 	return playField[index];
 }
 
-PlayField::fieldStatus PlayField::checkLineStatus(cellValue firstCell, cellValue secondCell, cellValue third—ell) const
+PlayField::fieldStatus PlayField::checkLineStatus(cellValue firstCell, cellValue secondCell, cellValue thirdCell) const
 {
-	if (firstCell == secondCell && secondCell == third—ell && secondCell != csEmpty)
+	if (firstCell == secondCell && secondCell == thirdCell && secondCell != csEmpty)
 	{
 		if (secondCell == csCross)
 			return fsCrossesWin;

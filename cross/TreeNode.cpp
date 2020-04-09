@@ -2,8 +2,8 @@
 
 #include <vector>
 #include <cassert>
-#include "PlayField.h";
-#include "TreeNode.h";
+#include "PlayField.h"
+#include "TreeNode.h"
 
 using namespace std;
 
@@ -19,10 +19,11 @@ int TreeNode::childQty() const
 	return element.getEmptyCells().size();
 }
 
-void TreeNode::addChild(TreeNode node)
+void TreeNode::addChild(TreeNode* node)
 {
 	assert(("at this level already the maximum number of descendants", childQty() > childCount()));
-	m_hair.push_back(&node);
+	node->m_parent = this;
+	m_hair.push_back(node);
 }
 
 TreeNode& TreeNode::operator[](int index) const
@@ -41,8 +42,23 @@ const PlayField& TreeNode::value() const
 	return element;
 }
 
-TreeNode::TreeNode(PlayField value, TreeNode* iParent)
+TreeNode::TreeNode(PlayField value)
 	: element(value)
+{}
+
+TreeNode::TreeNode(const TreeNode& tree)
+{}
+
+TreeNode::~TreeNode() 
 {
-	m_parent = iParent;
-}
+	if (m_parent)
+	{
+		for (int index = 0; index < m_parent->childCount(); index++)
+		{
+			if (m_parent->m_hair[index] == this)
+				m_parent->m_hair.erase(m_parent->m_hair.begin() + index);
+		}
+	}		
+	for (auto i : m_hair)
+		delete i;
+}	

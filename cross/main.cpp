@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void fullDetour(TreeNode tree, int &crossWinCount, int &noughtWinCount, int &drawWinCount)
+void fullDetour(TreeNode &tree, int &crossWinCount, int &noughtWinCount, int &drawWinCount)
 {
 	switch (tree.value().checkFieldStatus())
 	{
@@ -24,8 +24,9 @@ void fullDetour(TreeNode tree, int &crossWinCount, int &noughtWinCount, int &dra
 		{
 			for (auto i : tree.value().getEmptyCells())
 			{
-				tree.addChild(TreeNode(tree.value().makeMove(i), &tree));
-				fullDetour(*tree.m_hair.back(), crossWinCount, noughtWinCount, drawWinCount);
+				TreeNode child{ tree.value().makeMove(i) };
+				tree.addChild(&child);
+				fullDetour(child, crossWinCount, noughtWinCount, drawWinCount);
 			}
 		}
 	}
@@ -36,7 +37,7 @@ int main()
 	int overallCrossWinsCount = 0,
 		overallNoughtWinsCount = 0,
 		overallDrawWinsCount = 0;
-	TreeNode tree = TreeNode(PlayField(), 0);
+	TreeNode tree{ PlayField() };
 
 	for (auto i : tree.value().getEmptyCells())
 	{
@@ -45,7 +46,8 @@ int main()
 			drawWinCount = 0;
 
 		PlayField currentField = tree.value().makeMove(i);
-		tree.addChild(TreeNode(currentField, &tree));
+		TreeNode child{ currentField };
+		tree.addChild(&child);
 		currentField.printField();
 		fullDetour(*tree.m_hair.back(), crossWinCount, noughtWinCount, drawWinCount);
 		cout << "\t" << "x = " << crossWinCount << " o = " << noughtWinCount << " d = " << drawWinCount << endl;
