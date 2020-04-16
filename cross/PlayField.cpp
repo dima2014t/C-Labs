@@ -1,7 +1,6 @@
 // ©Тарасов Дмитрий РИ-280001
 
 #include <iostream>
-#include <vector>
 #include <cassert>
 #include "PlayField.h"
 
@@ -20,7 +19,7 @@ PlayField::CellPosition::CellPosition(int row, int column)
 
 PlayField::CellPosition::operator int() const
 {
-	return getRow() * 3 + getColumn();
+	return getRow() * playFieldLineSize + getColumn();
 }
 
 void PlayField::CellPosition::setRow(int iRow)
@@ -43,19 +42,19 @@ PlayField PlayField::makeMove(CellPosition position) const
 
 PlayField::PlayField()
 {
-	for (int index = 0; index < 9; index++)
+	for (int index = 0; index < playFieldSize; index++)
 		playField[index] = csEmpty;
 };
 
 
 PlayField::cellValue PlayField::operator[] (CellPosition position) const
 {
-	int index = int(position);
+	int index = position;
 	assert(("this cell is not on the playing field", (index >= 0 || index <= 8)));
 	return playField[index];
 }
 
-PlayField::fieldStatus PlayField::checkLineStatus(cellValue firstCell, cellValue secondCell, cellValue thirdCell) const
+PlayField::fieldStatus PlayField::checkLineStatus(const cellValue firstCell, const cellValue secondCell, const cellValue thirdCell)
 {
 	if (firstCell == secondCell && secondCell == thirdCell && secondCell != csEmpty)
 	{
@@ -69,7 +68,7 @@ PlayField::fieldStatus PlayField::checkLineStatus(cellValue firstCell, cellValue
 PlayField::fieldStatus PlayField::checkFieldStatus() const
 {
 	bool isCrossWin = false, isNoughtWin = false;
-	for (int index = 0; index < 3; index++) {
+	for (int index = 0; index < playFieldLineSize; index++) {
 		fieldStatus rowStatus = checkLineStatus((*this)[CellPosition(index, 0)], (*this)[CellPosition(index, 1)], (*this)[CellPosition(index, 2)]);
 		fieldStatus columnStatus = checkLineStatus((*this)[CellPosition(0, index)], (*this)[CellPosition(1, index)], (*this)[CellPosition(2, index)]);
 		if (rowStatus == fsCrossesWin || columnStatus == fsCrossesWin)
@@ -98,17 +97,21 @@ PlayField::fieldStatus PlayField::checkFieldStatus() const
 vector<PlayField::CellPosition> PlayField::getEmptyCells() const
 {
 	vector<CellPosition> emptyCells;
-	for (int i = 0; i < 9; i++)
+	for (int row = 0; row < playFieldLineSize; row++)
 	{
-		if (playField[i] == csEmpty)
-			emptyCells.push_back(PlayField::CellPosition(i / 3, i % 3));
+		for (int column = 0; column < playFieldLineSize; column++)
+		{
+			CellPosition position(CellPosition(row, column));
+			if (playField[position] == csEmpty)
+				emptyCells.push_back(position);
+		}
 	}
 	return emptyCells;
 }
 
 void PlayField::printField()
 {
-	for (int index = 0; index < 9; index++)
+	for (int index = 0; index < playFieldSize; index++)
 	{
 		switch (playField[index])
 		{
@@ -122,7 +125,7 @@ void PlayField::printField()
 			cout << " ";
 			break;
 		}
-		if (index % 3 == 2)
+		if (index % playFieldLineSize == 2)
 			cout << endl;
 		else
 			cout << "|";

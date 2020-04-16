@@ -1,8 +1,6 @@
 // ©Тарасов Дмитрий РИ-280001
 
-#include <vector>
 #include <cassert>
-#include "PlayField.h"
 #include "TreeNode.h"
 
 using namespace std;
@@ -44,9 +42,6 @@ const PlayField& TreeNode::value() const
 
 TreeNode::TreeNode(PlayField value)
 	: element(value)
-{}
-
-TreeNode::TreeNode(const TreeNode& tree)
 {}
 
 TreeNode::~TreeNode() 

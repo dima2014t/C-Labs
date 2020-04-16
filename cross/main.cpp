@@ -1,7 +1,6 @@
 ﻿// ©Тарасов Дмитрий РИ-280001
 
 #include <iostream>
-#include <vector>
 #include "PlayField.h"
 #include "TreeNode.h"
 
@@ -24,7 +23,7 @@ void fullDetour(TreeNode &tree, int &crossWinCount, int &noughtWinCount, int &dr
 		{
 			for (auto i : tree.value().getEmptyCells())
 			{
-				TreeNode child{ tree.value().makeMove(i) };
+				TreeNode child = TreeNode(tree.value().makeMove(i));
 				tree.addChild(&child);
 				fullDetour(child, crossWinCount, noughtWinCount, drawWinCount);
 			}
@@ -37,7 +36,7 @@ int main()
 	int overallCrossWinsCount = 0,
 		overallNoughtWinsCount = 0,
 		overallDrawWinsCount = 0;
-	TreeNode tree{ PlayField() };
+	TreeNode tree = TreeNode(PlayField());
 
 	for (auto i : tree.value().getEmptyCells())
 	{
@@ -46,10 +45,10 @@ int main()
 			drawWinCount = 0;
 
 		PlayField currentField = tree.value().makeMove(i);
-		TreeNode child{ currentField };
+		TreeNode child = TreeNode(currentField);
 		tree.addChild(&child);
 		currentField.printField();
-		fullDetour(*tree.m_hair.back(), crossWinCount, noughtWinCount, drawWinCount);
+		fullDetour(child, crossWinCount, noughtWinCount, drawWinCount);
 		cout << "\t" << "x = " << crossWinCount << " o = " << noughtWinCount << " d = " << drawWinCount << endl;
 		overallCrossWinsCount += crossWinCount;
 		overallNoughtWinsCount += noughtWinCount;

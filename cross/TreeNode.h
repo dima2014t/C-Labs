@@ -1,6 +1,7 @@
 // ©Тарасов Дмитрий РИ-280001
 
 #include <vector>
+#include "PlayField.h"
 
 using namespace std;
 
@@ -15,11 +16,9 @@ public:
 	TreeNode& operator[](int) const;
 	void addChild(TreeNode*);
 
-	vector<TreeNode*> m_hair;
-	TreeNode* m_parent = 0;
-
 private:
-	TreeNode(const TreeNode&);
 	int childQty() const;
 	const PlayField element;
+	vector<TreeNode*> m_hair;
+	TreeNode* m_parent = 0;
 };

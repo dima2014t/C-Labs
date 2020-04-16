@@ -1,5 +1,6 @@
 // ©Тарасов Дмитрий РИ-280001
 
+#pragma once
 #include <vector>
 
 using namespace std;
@@ -47,7 +48,9 @@ public:
 
 private:
 	PlayField operator+(CellPosition position) const;
-	fieldStatus checkLineStatus(cellValue, cellValue, cellValue) const;
+	static fieldStatus checkLineStatus(cellValue, cellValue, cellValue);
 
-	cellValue playField[9];
+	static const int playFieldSize = 9;
+	static const int playFieldLineSize = 3;
+	cellValue playField[playFieldSize];
 };
