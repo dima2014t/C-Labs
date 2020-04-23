@@ -5,11 +5,12 @@
 
 using namespace std;
 
-
 bool TreeNode::isTerminal() const
 {
 	PlayField::fieldStatus elementStatus = element.checkFieldStatus();
-	return elementStatus != PlayField::fsInvalid && elementStatus != PlayField::fsNormal;
+	return elementStatus == PlayField::fsCrossesWin || 
+		elementStatus == PlayField::fsNoughtsWin || 
+		elementStatus == PlayField::fsDraw;
 }
 
 int TreeNode::childQty() const

@@ -11,13 +11,13 @@ void fullDetour(TreeNode &tree, int &crossWinCount, int &noughtWinCount, int &dr
 	switch (tree.value().checkFieldStatus())
 	{
 		case(PlayField::fsCrossesWin):
-			(crossWinCount)++;
+			crossWinCount++;
 			break;
 		case(PlayField::fsNoughtsWin):
-			(noughtWinCount)++;
+			noughtWinCount++;
 			break;
 		case(PlayField::fsDraw):
-			(drawWinCount)++;
+			drawWinCount++;
 			break;
 		case(PlayField::fsNormal):
 		{
@@ -27,7 +27,10 @@ void fullDetour(TreeNode &tree, int &crossWinCount, int &noughtWinCount, int &dr
 				tree.addChild(&child);
 				fullDetour(child, crossWinCount, noughtWinCount, drawWinCount);
 			}
+			break;
 		}
+		default:
+			break;
 	}
 }
 

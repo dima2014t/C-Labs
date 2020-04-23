@@ -1,9 +1,6 @@
-// ©Тарасов Дмитрий РИ-280001
-
 #pragma once
-#include <vector>
 
-using namespace std;
+#include <vector>
 
 class PlayField
 {
@@ -43,14 +40,14 @@ public:
 	cellValue operator[] (CellPosition) const;
 	fieldStatus checkFieldStatus() const;
 	PlayField makeMove(CellPosition) const;
-	vector<CellPosition> getEmptyCells() const;
-	void printField();
+	std::vector<CellPosition> getEmptyCells() const;
+	void printField() const;
 
 private:
 	PlayField operator+(CellPosition position) const;
 	static fieldStatus checkLineStatus(cellValue, cellValue, cellValue);
 
-	static const int playFieldSize = 9;
-	static const int playFieldLineSize = 3;
+	static constexpr int playFieldLineSize = 3;
+	static constexpr int playFieldSize = playFieldLineSize * playFieldLineSize;
 	cellValue playField[playFieldSize];
 };

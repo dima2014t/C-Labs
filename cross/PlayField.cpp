@@ -109,26 +109,29 @@ vector<PlayField::CellPosition> PlayField::getEmptyCells() const
 	return emptyCells;
 }
 
-void PlayField::printField()
+void PlayField::printField() const
 {
-	for (int index = 0; index < playFieldSize; index++)
+	for (int row = 0; row < playFieldLineSize; row++)
 	{
-		switch (playField[index])
+		for (int column = 0; column < playFieldLineSize; column++)
 		{
-		case (csCross):
-			cout << "x";
-			break;
-		case (csNought):
-			cout << "o";
-			break;
-		default:
-			cout << " ";
-			break;
+			switch (playField[CellPosition(row, column)])
+			{
+			case (csCross):
+				cout << "x";
+				break;
+			case (csNought):
+				cout << "o";
+				break;
+			default:
+				cout << " ";
+				break;
+			}
+			if (column == 2)
+				cout << endl;
+			else
+				cout << "|";
 		}
-		if (index % playFieldLineSize == 2)
-			cout << endl;
-		else
-			cout << "|";
 	}
 }
 	
@@ -149,6 +152,17 @@ PlayField PlayField::operator+(CellPosition position) const
 			noughtCount++;
 		}
 	}
-	fieldCopy.playField[int(position)] = crossCount > noughtCount ? csNought : csCross;
+	switch (crossCount - noughtCount)
+	{
+	case -1:
+		fieldCopy.playField[int(position)] = csCross;
+		break;
+	case 0:
+		fieldCopy.playField[int(position)] = csCross;
+		break;
+	case 1:
+		fieldCopy.playField[position] = csNought;
+		break;
+	}
 	return fieldCopy;
 }

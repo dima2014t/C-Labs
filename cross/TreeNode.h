@@ -3,8 +3,6 @@
 #include <vector>
 #include "PlayField.h"
 
-using namespace std;
-
 class TreeNode
 {
 public:
@@ -19,6 +17,6 @@ public:
 private:
 	int childQty() const;
 	const PlayField element;
-	vector<TreeNode*> m_hair;
+	std::vector<TreeNode*> m_hair;
 	TreeNode* m_parent = 0;
 };
