@@ -28,5 +28,7 @@ int main()
 {
 	int arr[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	BinaryTree* tree = CreateMinimalBST(arr, 0, sizeof(arr) / sizeof(arr[0]) - 1);
+	TreeNode* node = tree->Search(7);
+	cout << node << endl << node->getValue();
 	return 0;
 }

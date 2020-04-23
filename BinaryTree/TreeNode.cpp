@@ -3,18 +3,11 @@
 
 using namespace std;
 
-TreeNode::TreeNode()
-{
-	m_value = 0;
-	m_lowerValueNode = nullptr;
-	m_highValueNode = nullptr;
-}
+TreeNode::TreeNode() {}
 
 TreeNode::TreeNode(int value)
 {
 	m_value = value;
-	m_lowerValueNode = nullptr;
-	m_highValueNode = nullptr;
 }
 
 TreeNode::~TreeNode()

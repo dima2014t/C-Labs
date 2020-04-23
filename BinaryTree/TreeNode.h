@@ -1,13 +1,12 @@
 #pragma once
-#include <iostream>
 
-using namespace std;
+#include <iostream>
 
 class TreeNode
 {
 public:
 	TreeNode();
-	TreeNode(int);
+	explicit TreeNode(int);
 	~TreeNode();
 	int getValue() const;
 	void setValue(int);
@@ -17,7 +16,7 @@ public:
 	void setHighValueNode(TreeNode*);
 
 private:
-	int m_value;
-	TreeNode* m_lowerValueNode;
-	TreeNode* m_highValueNode;
+	int m_value = 0;
+	TreeNode* m_lowerValueNode = nullptr;
+	TreeNode* m_highValueNode = nullptr;
 };

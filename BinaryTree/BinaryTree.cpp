@@ -4,14 +4,16 @@
 
 using namespace std;
 
-BinaryTree::BinaryTree()
+BinaryTree::BinaryTree(){};
+
+BinaryTree::BinaryTree(int value)
 {
-	m_root = TreeNode();
+	m_root = new TreeNode(value);
 };
 
-BinaryTree::BinaryTree(TreeNode value)
+BinaryTree::~BinaryTree()
 {
-	m_root = value;
+	delete m_root;
 };
 
 void BinaryTree::Insert(TreeNode* node, int value)
@@ -37,12 +39,12 @@ void BinaryTree::Insert(TreeNode* node, int value)
 
 void BinaryTree::Insert(int value)
 {
-	Insert(&m_root, value);
+	Insert(m_root, value);
 }
 
 TreeNode* BinaryTree::Search(int value)
 {
-	return Search(&m_root, value);
+	return Search(m_root, value);
 }
 
 TreeNode* BinaryTree::Search(TreeNode* node, int value) const
