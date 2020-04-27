@@ -31,27 +31,25 @@ void recursiveQuickSort(int* array, int start, int end)
 		recursiveQuickSort(array, low, end);
 }
 
-class Borders
-{
-public:
-	Borders(int left, int right)
-	{
-		m_left = left;
-		m_right = right;
-	}
-	int m_left;
-	int m_right;
-private:
-};
-
 void quickSort(int* array, int start, int end)
 {
-	vector<Borders> queue;
-	queue.push_back(Borders(start, end));
-	while (queue.size() > 0)
+	struct Border
 	{
-		Borders board = queue.back();
-		queue.pop_back();
+	public:
+		Border(int left, int right)
+		{
+			m_left = left;
+			m_right = right;
+		}
+		int m_left;
+		int m_right;
+	};
+	vector<Border> stack;
+	stack.push_back(Border(start, end));
+	while (stack.size() > 0)
+	{
+		Border board = stack.back();
+		stack.pop_back();
 		int low = board.m_left;
 		int high = board.m_right;
 		int pivot = array[(low + high) / 2];
@@ -72,8 +70,8 @@ void quickSort(int* array, int start, int end)
 			}
 		}
 		if (high > board.m_left)
-			queue.push_back(Borders(board.m_left, high));
+			stack.push_back(Border(board.m_left, high));
 		if (low < board.m_right)
-			queue.push_back(Borders(low, board.m_right));
+			stack.push_back(Border(low, board.m_right));
 	}
 }

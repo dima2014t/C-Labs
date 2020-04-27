@@ -7,26 +7,26 @@ int recursiveBSearch(int soughtValue, int* array, int left, int right)
 {
 	if (right < left)
 		return -1;
-	int pivot = (left + right) / 2;
-	if (array[pivot] == soughtValue)
-		return pivot;
-	else if (array[pivot] > soughtValue)
-		return recursiveBSearch(soughtValue, array, left, pivot - 1);
-	return recursiveBSearch(soughtValue, array, pivot + 1, right);
+	int pivotIndex = (left + right) / 2;
+	if (array[pivotIndex] == soughtValue)
+		return pivotIndex;
+	else if (array[pivotIndex] > soughtValue)
+		return recursiveBSearch(soughtValue, array, left, pivotIndex - 1);
+	return recursiveBSearch(soughtValue, array, pivotIndex + 1, right);
 }
 
 int bSearch(int soughtValue, int* array, int left, int right)
 {
-	int index = (left + right) / 2;
-	while (index >= left && index <= right)
+	int pivotIndex = (left + right) / 2;
+	while (pivotIndex >= left && pivotIndex <= right)
 	{
-		if (array[index] == soughtValue)
-			return index;
-		if (array[index] > soughtValue)
-			right = index - 1;		
+		if (array[pivotIndex] == soughtValue)
+			return pivotIndex;
+		if (array[pivotIndex] > soughtValue)
+			right = pivotIndex - 1;		
 		else
-			left = index + 1;
-		index = (left + right) / 2;
+			left = pivotIndex + 1;
+		pivotIndex = (left + right) / 2;
 	}
 	return -1;
 }

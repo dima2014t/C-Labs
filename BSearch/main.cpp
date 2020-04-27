@@ -31,7 +31,7 @@ void searchTimeMeasurements(int* array, int arraySize, int searchedValue, int (*
 		"\t" << "Found index = " << index << endl;
 	if (index >= 0 && index < arraySize)
 		cout << "\t" << "Value by found index = " << array[index] << endl;
-	cout << " \t" << "Time spent = " << chrono::nanoseconds(end - start).count() << "ns" << endl;
+	cout << " \t" << "Time spent = " << chrono::nanoseconds(end - start).count() << " ns" << endl;
 }
 
 int main()
