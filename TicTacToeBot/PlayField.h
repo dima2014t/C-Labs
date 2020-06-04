@@ -45,9 +45,9 @@ public:
 
 private:
 	PlayField operator+(CellPosition position) const;
-	static fieldStatus checkLineStatus(cellValue, cellValue, cellValue);
+	static fieldStatus checkLineStatus(std::vector<cellValue>&);
 
-	static const int playFieldSize = 9;
 	static const int playFieldLineSize = 3;
+	static const int playFieldSize = playFieldLineSize * playFieldLineSize;
 	cellValue playField[playFieldSize];
 };

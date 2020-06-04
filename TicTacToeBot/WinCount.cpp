@@ -29,7 +29,19 @@ void WinCount::setDrawWinCount(int value)
 
 void WinCount::operator+=(WinCount left)
 {
-	m_crossWinCount += left.getCrossWinCount(),
-	m_noughtWinCount += left.getNoughtWinCount(),
+	m_crossWinCount += left.getCrossWinCount();
+	m_noughtWinCount += left.getNoughtWinCount();
 	m_drawWinCount += left.getDrawWinCount();
+}
+
+int WinCount::getTotalWinCount()
+{
+	return m_crossWinCount + m_noughtWinCount + m_drawWinCount;
+}
+
+double WinCount::getShareFavorableOutcomes(PlayField::cellValue symbol)
+{
+	if(symbol == PlayField::cellValue::csCross)
+		return (m_crossWinCount + m_drawWinCount) / (double)getTotalWinCount();
+	return (m_noughtWinCount + m_drawWinCount) / (double)getTotalWinCount();
 }

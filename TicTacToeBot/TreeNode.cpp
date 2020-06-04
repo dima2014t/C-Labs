@@ -13,6 +13,8 @@ bool TreeNode::isTerminal() const
 
 int TreeNode::childQty() const
 {
+	if (m_parent)
+		return m_parent->childQty() - 1;
 	return element.getEmptyCells().size();
 }
 

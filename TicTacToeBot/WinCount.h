@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include "PlayField.h"
 
 class WinCount
 {
@@ -14,6 +15,8 @@ public:
 	void setDrawWinCount(int);
 	int getDrawWinCount() const { return m_drawWinCount; };
 	void operator += (WinCount);
+	int getTotalWinCount();
+	double getShareFavorableOutcomes(PlayField::cellValue);
 
 private:
 	int m_crossWinCount = 0;

@@ -19,7 +19,8 @@ void XOPlayer::makeMove(PlayField::CellPosition iCell)
 	assert(("this cell is already taken", m_currentState->value()[iCell] == PlayField::csEmpty));
 	for (int i = 0; i < m_currentState->childCount(); i++)
 	{
-		if ((*m_currentState)[i].value()[iCell] != PlayField::cellValue::csEmpty)
+		if ((*m_currentState)[i].value()[iCell] != PlayField::cellValue::csEmpty &&
+			(*m_currentState)[i].value()[iCell] != m_botSymbol)
 		{
 			m_currentState = &(*m_currentState)[i];
 			break;
@@ -33,16 +34,8 @@ void XOPlayer::makeMove()
 	double bestShareFavorableOutcomes = 0;
 	for (int i = 0; i < m_currentState->childCount(); i++)
 	{
-		double winCount;
 		TreeNode& possibleMove = (*m_currentState)[i];
-		double outcomesTotalCount = possibleMove.winCount.getCrossWinCount() + 
-			possibleMove.winCount.getNoughtWinCount() + 
-			possibleMove.winCount.getDrawWinCount();
-		if (m_botSymbol == PlayField::cellValue::csCross)
-			winCount = possibleMove.winCount.getCrossWinCount();
-		else
-			winCount = possibleMove.winCount.getNoughtWinCount();
-		double shareFavorableOutcomes = (winCount + possibleMove.winCount.getDrawWinCount()) / outcomesTotalCount;
+		double shareFavorableOutcomes = possibleMove.winCount.getShareFavorableOutcomes(m_botSymbol);
 		if (shareFavorableOutcomes > bestShareFavorableOutcomes)
 		{
 			bestShareFavorableOutcomes = shareFavorableOutcomes;

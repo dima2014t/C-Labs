@@ -52,30 +52,41 @@ PlayField::cellValue PlayField::operator[] (CellPosition position) const
 	return playField[index];
 }
 
-PlayField::fieldStatus PlayField::checkLineStatus(const cellValue firstCell, const cellValue secondCell, const cellValue thirdCell)
+PlayField::fieldStatus PlayField::checkLineStatus(vector<cellValue>& line)
 {
-	if (firstCell == secondCell && secondCell == thirdCell && secondCell != csEmpty)
+	for (auto i : line)
 	{
-		if (secondCell == csCross)
-			return fsCrossesWin;
-		return fsNoughtsWin;
+		if (i != line[0] || i == csEmpty)
+			return fsNormal;
 	}
-	return fsNormal;
+	if (line[0] == csCross)
+		return fsCrossesWin;
+	return fsNoughtsWin;
+
 }
 
 PlayField::fieldStatus PlayField::checkFieldStatus() const
 {
 	bool isCrossWin = false, isNoughtWin = false;
-	for (int index = 0; index < playFieldLineSize; index++) {
-		fieldStatus rowStatus = checkLineStatus((*this)[CellPosition(index, 0)], (*this)[CellPosition(index, 1)], (*this)[CellPosition(index, 2)]);
-		fieldStatus columnStatus = checkLineStatus((*this)[CellPosition(0, index)], (*this)[CellPosition(1, index)], (*this)[CellPosition(2, index)]);
+	vector<cellValue> firstDiagonal, secondDiagonal;
+	for (int i = 0; i < playFieldLineSize; i++) {
+		vector<cellValue> row, column;
+		firstDiagonal.push_back((*this)[CellPosition(i, i)]);
+		secondDiagonal.push_back((*this)[CellPosition(i, playFieldLineSize - 1 - i)]);
+		for (int j = 0; j < playFieldLineSize; j++)
+		{
+			row.push_back((*this)[CellPosition(i, j)]);
+			column.push_back((*this)[CellPosition(j, i)]);
+		}	
+		fieldStatus rowStatus = checkLineStatus(row);
+		fieldStatus columnStatus = checkLineStatus(column);
 		if (rowStatus == fsCrossesWin || columnStatus == fsCrossesWin)
 			isCrossWin = true;
 		else if (rowStatus == fsNoughtsWin || columnStatus == fsNoughtsWin)
 			isNoughtWin = true;
 	}
-	fieldStatus firstDiagonalStatus = checkLineStatus((*this)[CellPosition(0, 0)], (*this)[CellPosition(1, 1)], (*this)[CellPosition(2, 2)]);
-	fieldStatus secondDiagonalStatus = checkLineStatus((*this)[CellPosition(0, 2)], (*this)[CellPosition(1, 1)], (*this)[CellPosition(2, 0)]);
+	fieldStatus firstDiagonalStatus = checkLineStatus(firstDiagonal);
+	fieldStatus secondDiagonalStatus = checkLineStatus(secondDiagonal);
 	if (firstDiagonalStatus == fsCrossesWin || secondDiagonalStatus == fsCrossesWin)
 		isCrossWin = true;
 	if (firstDiagonalStatus == fsNoughtsWin || secondDiagonalStatus == fsNoughtsWin)
@@ -151,14 +162,16 @@ PlayField PlayField::operator+(CellPosition position) const
 	switch (crossCount - noughtCount)
 	{
 	case -1:
-		fieldCopy.playField[int(position)] = csCross;
+		fieldCopy.playField[position] = csCross;
 		break;
 	case 0:
-		fieldCopy.playField[int(position)] = csCross;
+		fieldCopy.playField[position] = csCross;
 		break;
 	case 1:
 		fieldCopy.playField[position] = csNought;
 		break;
+	default:
+		assert("the field is in an unplayable state");
 	}
 	return fieldCopy;
 }

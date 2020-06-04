@@ -36,19 +36,14 @@ void playerMove(XOPlayer& player)
 		cout << "Enter the coordinate of your move:";
 		int row, column;
 		cin >> row >> column;
-		if (row >= 0 && column >= 0 && row <= 2 && column <= 2)
+		auto cell = PlayField::CellPosition(row, column);
+		if (player.currentState()[cell] == PlayField::csEmpty)
 		{
-			auto cell = PlayField::CellPosition(row, column);
-			if (player.currentState()[cell] == PlayField::csEmpty)
-			{
-				player.makeMove(cell);
-				break;
-			}
-			else
-				cout << "This cell is already taken" << endl;
+			player.makeMove(cell);
+			break;
 		}
 		else
-			cout << "Incorrect cell coordinates" << endl;
+			cout << "This cell is already taken" << endl;
 	}
 	player.currentState().printField();
 }
@@ -73,10 +68,7 @@ int main()
 	do 
 	{
 		move(player);
-		if (move == botMove)
-			move = playerMove;
-		else 
-			move = botMove;
+		move = (move == botMove) ? playerMove : botMove;
 	} while (player.fieldStatus() == PlayField::fsNormal);
 
 	cout << "The game is over with the result: ";
