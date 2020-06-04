@@ -5,7 +5,11 @@
 class Matrix3D : public MatrixBase
 {
 public:
-	Matrix3D();
-	virtual int element(unsigned int, unsigned int) const;
-	virtual int& element(unsigned int, unsigned int);
+	Matrix3D() : MatrixBase(m_dim) {};
+	virtual int element(unsigned int, unsigned int) const override;
+	virtual int& element(unsigned int, unsigned int) override;
+
+private:
+	static constexpr int m_dim = 3;
+	int m_matrix[m_dim][m_dim];
 };

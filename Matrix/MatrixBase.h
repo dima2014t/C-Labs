@@ -13,7 +13,6 @@ public:
 
 protected:
 	MatrixBase(unsigned int);
-	int** m_matrix;
 
 private:
 	const unsigned int m_size;
