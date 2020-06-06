@@ -6,8 +6,8 @@ class Matrix2D : public MatrixBase
 {
 public:
 	Matrix2D() : MatrixBase(m_dim) {};
-	virtual int element(unsigned int, unsigned int) const override;
-	virtual int& element(unsigned int, unsigned int) override;
+	virtual int element(unsigned int, unsigned int) const override final;
+	virtual int& element(unsigned int, unsigned int) override final;
 
 private:
 	static constexpr int m_dim = 2;

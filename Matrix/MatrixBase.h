@@ -7,8 +7,8 @@ public:
 	unsigned int size() const;
 	virtual int element(unsigned int, unsigned int) const = 0;
 	virtual int& element(unsigned int, unsigned int) = 0;
-	void operator*=(int);
-	void operator+=(MatrixBase&);
+	MatrixBase& operator*=(int);
+	MatrixBase& operator+=(const MatrixBase&);
 	friend std::ostream& operator<<(std::ostream&, const MatrixBase&);
 
 protected:

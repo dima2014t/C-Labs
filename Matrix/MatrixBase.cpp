@@ -10,18 +10,20 @@ unsigned int MatrixBase::size() const
 	return m_size;
 }
 
-void MatrixBase::operator*=(int iMult)
+MatrixBase& MatrixBase::operator*=(int iMult)
 {
 	for (int i = 0; i < m_size; i++)
 		for (int j = 0; j < m_size; j++)
-			this->element(i, j) *= iMult;
+			element(i, j) *= iMult;
+	return *this;
 }
 
-void MatrixBase::operator+=(MatrixBase& iAdd)
+MatrixBase& MatrixBase::operator+=(const MatrixBase& iMatrix)
 {
 	for (int i = 0; i < m_size; i++)
 		for (int j = 0; j < m_size; j++)
-			this->element(i, j) += iAdd.element(i, j);
+			element(i, j) += iMatrix.element(i, j);
+	return *this;
 }
 
 std::ostream& operator<<(std::ostream& stream, const MatrixBase& iMatrix)
