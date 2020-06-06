@@ -14,11 +14,13 @@ public:
 	const PlayField& value() const;
 	TreeNode& operator[](int) const;
 	void addChild(TreeNode*);
-	WinCount winCount;
+	void setWinCount(WinCount iWinCount) { winCount = iWinCount; }
+	WinCount& getWinCount() { return winCount; }
 
 private:
 	int childQty() const;
 	const PlayField element;
 	std::vector<TreeNode*> m_hair;
 	TreeNode* m_parent = nullptr;
+	WinCount winCount;
 };

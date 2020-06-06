@@ -35,7 +35,7 @@ void XOPlayer::makeMove()
 	for (int i = 0; i < m_currentState->childCount(); i++)
 	{
 		TreeNode& possibleMove = (*m_currentState)[i];
-		double shareFavorableOutcomes = possibleMove.winCount.getShareFavorableOutcomes(m_botSymbol);
+		double shareFavorableOutcomes = possibleMove.getWinCount().getShareFavorableOutcomes(m_botSymbol);
 		if (shareFavorableOutcomes > bestShareFavorableOutcomes)
 		{
 			bestShareFavorableOutcomes = shareFavorableOutcomes;

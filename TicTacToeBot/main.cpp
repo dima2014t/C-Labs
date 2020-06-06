@@ -8,13 +8,13 @@ void fullDetour(TreeNode& tree)
 	switch (tree.value().checkFieldStatus())
 	{
 	case(PlayField::fsCrossesWin):
-		tree.winCount.setCrossWinCount(1);
+		tree.setWinCount(WinCount(1, 0, 0));
 		break;
 	case(PlayField::fsNoughtsWin):
-		tree.winCount.setNoughtWinCount(1);
+		tree.setWinCount(WinCount(0, 1, 0));
 		break;
 	case(PlayField::fsDraw):
-		tree.winCount.setDrawWinCount(1);
+		tree.setWinCount(WinCount(0, 0, 1));
 		break;
 	case(PlayField::fsNormal):
 	{
@@ -23,7 +23,7 @@ void fullDetour(TreeNode& tree)
 			TreeNode* child = new TreeNode(tree.value().makeMove(i));
 			tree.addChild(child);
 			fullDetour(*child);
-			tree.winCount += child->winCount;
+			tree.getWinCount() += child->getWinCount();
 		}
 	}
 	}
